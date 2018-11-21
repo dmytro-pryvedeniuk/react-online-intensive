@@ -9,12 +9,9 @@ export default class Feed extends Component {
     render() {
         return (
             <section className = { Styles.feed }>
-                <StatusBar { ...this.props } />
-                <Composer
-                    avatar = { this.props.avatar }
-                    userFirstName = { this.props.userFirstName }
-                />
-                <Post { ...this.props } />
+                <StatusBar />
+                <Composer />
+                <Post />
             </section>
         );
     }
