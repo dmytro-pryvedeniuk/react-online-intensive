@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
 import avatar from 'theme/assets/homer';
 
+import Styles from './styles.m.css';
+
 export default class Composer extends Component {
     render() {
         return (
-            <section>
-                <img src = { avatar } />
+            <section className={Styles.composer}>
+                <img src={avatar} />
                 <form>
-                    <textarea placeholder = { 'What\'s on your mind, Homer?' } />
+                    <textarea placeholder={'What\'s on your mind, Homer?'} />
                     <input
-                        type = 'submit'
-                        value = 'Post'
+                        type='submit'
+                        value='Post'
                     />
                 </form>
             </section>
