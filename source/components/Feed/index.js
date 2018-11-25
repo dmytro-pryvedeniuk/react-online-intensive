@@ -8,14 +8,15 @@ import Styles from './styles.m.css';
 
 export default class Feed extends Component {
     state = {
-        posts: [
+        isSpinning: true,
+        posts:      [
             { id: 123, comment: 'Hello', created: 1543142470 },
             { id: 124, comment: 'It\'s me', created: 1543142450 },
         ],
     };
 
     render() {
-        const { posts } = this.state;
+        const { posts, isSpinning } = this.state;
 
         const postsJSX = posts.map((post) => {
             return (
@@ -28,7 +29,7 @@ export default class Feed extends Component {
 
         return (
             <section className = { Styles.feed }>
-                <Spinner isSpinning />
+                <Spinner isSpinning = { isSpinning } />
                 <StatusBar />
                 <Composer />
                 {postsJSX}
