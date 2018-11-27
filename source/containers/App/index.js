@@ -6,8 +6,8 @@ import avatar from 'theme/assets/homer';
 import { hot } from 'react-hot-loader';
 
 var options = {
-    userFirstName: 'Homer',
-    userLastName:  'Simpson',
+    currentUserFirstName: 'Homer',
+    currentUserLastName:  'Simpson',
     avatar,
 };
 
@@ -16,7 +16,7 @@ export default class App extends Component {
     render() {
         return (
             <Provider value = { options }>
-                <Feed />
+                <Feed { ...options } />
             </Provider>
         );
     }
