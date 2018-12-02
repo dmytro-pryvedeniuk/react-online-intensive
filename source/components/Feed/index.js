@@ -52,11 +52,12 @@ export default class Feed extends Component {
 
     async _likePost(id) {
         const { currentUserFirstName, currentUserLastName } = this.props;
+        const { posts } = this.state;
         this._setPostsFetchingState(true);
 
         await delay(1200);
 
-        const newPosts = this.state.posts.map((post) => {
+        const newPosts = posts.map((post) => {
             if (post.id === id) {
                 return {
                     ...post,
@@ -80,11 +81,13 @@ export default class Feed extends Component {
     }
 
     async _deletePost(id) {
+        const { posts } = this.state;
+
         this._setPostsFetchingState(true);
 
         await delay(600);
-        
-        const newPosts = this.state.posts.filter((post) => post.id !== id);
+
+        const newPosts = posts.filter((post) => post.id !== id);
         this.setState({
             posts:           newPosts,
             isPostsFetching: false,
