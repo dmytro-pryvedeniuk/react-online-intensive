@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import {withProfile} from '../HOC/withProfile';
+import { withProfile } from '../HOC/withProfile';
 import cx from 'classnames';
 import { string, arrayOf, shape, func } from 'prop-types';
 import Styles from './styles.m.css';
@@ -27,19 +27,19 @@ export default class Like extends Component {
         this.setState({
             showLikers: true,
         });
-    }
+    };
 
     _hideLikers = () => {
         this.setState({
             showLikers: false,
         });
-    }
+    };
 
     _likePost = () => {
         const { _likePost, id } = this.props;
 
         _likePost(id);
-    }
+    };
 
     _getLikedByMe = () => {
         const { currentUserFirstName, currentUserLastName, likes } = this.props;
@@ -47,7 +47,7 @@ export default class Like extends Component {
         return likes.some(({ firstName, lastName }) => {
             return `${firstName} ${lastName}` === `${currentUserFirstName} ${currentUserLastName}`;
         });
-    }
+    };
 
     _getLikeStyles = () => {
         const likedByMe = this._getLikedByMe();
@@ -55,7 +55,7 @@ export default class Like extends Component {
         return cx(Styles.icon, {
             [ Styles.liked ]: likedByMe,
         });
-    }
+    };
 
     _getLikersList = () => {
         const { showLikers } = this.state;
@@ -66,7 +66,7 @@ export default class Like extends Component {
         ));
 
         return likes.length > 0 && showLikers ? <ul>{likesJSX}</ul> : null;
-    }
+    };
 
     _getLikesDescription = () => {
         const { likes, currentUserFirstName, currentUserLastName } = this.props;
@@ -81,7 +81,7 @@ export default class Like extends Component {
         }
 
         return likes.length;
-    }
+    };
 
     render() {
         const likeStyles = this._getLikeStyles();

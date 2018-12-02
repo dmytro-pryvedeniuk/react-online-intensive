@@ -5,6 +5,6 @@ import Styles from './styles.m.css';
 
 const portal = document.getElementById('spinner');
 
-export default function Spinner({isSpinning = false}) {
+export default function Spinner({ isSpinning = false }) {
     return createPortal(isSpinning ? <div className = { Styles.spinner } /> : null, portal);
 }

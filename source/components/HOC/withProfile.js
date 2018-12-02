@@ -6,12 +6,16 @@ const withProfile = (Enhanceable) => {
     return class WithProfile extends Component {
         render() {
             return (
-                <Consumer>
-                    {(context) => <Enhanceable {...context} {...this.props} />}
+                <Consumer>{(context) => (
+                    <Enhanceable
+                        { ...context }
+                        { ...this.props }
+                    />
+                )}
                 </Consumer>
-            )
+            );
         }
-    }
-}
+    };
+};
 
-export { Provider, Consumer, withProfile };
+export { Provider, withProfile };

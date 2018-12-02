@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
-import {withProfile} from '../HOC/withProfile';
+import { withProfile } from '../HOC/withProfile';
 import Composer from '../Composer';
 import Post from '../Post';
 import StatusBar from '../../components/StatusBar';
@@ -12,7 +12,6 @@ import { getUniqueID, delay } from '../../instruments';
 
 @withProfile
 export default class Feed extends Component {
-
     state = {
         isPostsFetching: false,
         posts:           [
@@ -25,7 +24,7 @@ export default class Feed extends Component {
         this.setState({
             isPostsFetching: value,
         });
-    }
+    };
 
     _createPost = async (comment) => {
         this._setPostsFetchingState(true);
@@ -43,7 +42,7 @@ export default class Feed extends Component {
             posts: [ post, ...posts ],
         }));
         this._setPostsFetchingState(false);
-    }
+    };
 
     _likePost = async (id) => {
         const { currentUserFirstName, currentUserLastName } = this.props;
@@ -73,7 +72,7 @@ export default class Feed extends Component {
             posts:           newPosts,
             isPostsFetching: false,
         });
-    }
+    };
 
     _deletePost = async (id) => {
         const { posts } = this.state;
@@ -87,7 +86,7 @@ export default class Feed extends Component {
             posts:           newPosts,
             isPostsFetching: false,
         });
-    }
+    };
 
     render() {
         const { posts, isPostsFetching } = this.state;

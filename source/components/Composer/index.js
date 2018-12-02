@@ -19,12 +19,12 @@ export default class Composer extends Component {
         this.setState({
             comment: event.target.value,
         });
-    }
+    };
 
     _handleOnSubmit = (event) => {
         event.preventDefault();
         this._submitComment();
-    }
+    };
 
     _submitComment = () => {
         const { comment } = this.state;
@@ -38,32 +38,32 @@ export default class Composer extends Component {
         this.setState({
             comment: '',
         });
-    }
+    };
 
     _handleOnKeyPress = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             this._submitComment();
         }
-    }
+    };
 
     render() {
         const { comment } = this.state;
-        const { avatar, userFirstName } = this.props;
+        const { avatar, currentUserFirstName } = this.props;
 
         return (
-            <section className={Styles.composer}>
-                <img src={avatar} />
-                <form onSubmit={this._handleOnSubmit}>
+            <section className = { Styles.composer }>
+                <img src = { avatar } />
+                <form onSubmit = { this._handleOnSubmit }>
                     <textarea
-                        placeholder={`What\'s on your mind, ${userFirstName}?`}
-                        value={comment}
-                        onChange={this._updateComment}
-                        onKeyPress={this._handleOnKeyPress}
+                        placeholder = { `What\'s on your mind, ${currentUserFirstName}?` }
+                        value = { comment }
+                        onChange = { this._updateComment }
+                        onKeyPress = { this._handleOnKeyPress }
                     />
                     <input
-                        type='submit'
-                        value='Post'
+                        type = 'submit'
+                        value = 'Post'
                     />
                 </form>
             </section>
