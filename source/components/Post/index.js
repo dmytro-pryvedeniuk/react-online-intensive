@@ -17,18 +17,13 @@ export default class Post extends Component {
         likes:       array.isRequired,
     };
 
-    constructor() {
-        super();
-        this._deletePost = this._deletePost.bind(this);
-    }
-
-    _deletePost() {
+    _deletePost = () => {
         const { _deletePost, id } = this.props;
         _deletePost(id);
     }
 
     render() {
-        const { comment, created, _likePost, _deletePost, id, likes } = this.props;
+        const { comment, created, _likePost, id, likes } = this.props;
 
         return (
             <Consumer>
@@ -48,7 +43,6 @@ export default class Post extends Component {
                             _likePost = { _likePost }
                             id = { id }
                             likes = { likes }
-                            { ...context }
                         />
                     </section>
                 )}

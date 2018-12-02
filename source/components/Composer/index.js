@@ -1,40 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import { Consumer } from '../HOC/withProfile';
+import { withProfile } from '../HOC/withProfile';
 
 import Styles from './styles.m.css';
 
+@withProfile
 export default class Composer extends Component {
     static propTypes = {
         _createPost: PropTypes.func.isRequired,
     };
 
-    constructor() {
-        super();
-
-        this._updateComment = this._updateComment.bind(this);
-        this._submitComment = this._submitComment.bind(this);
-        this._handleOnKeyPress = this._handleOnKeyPress.bind(this);
-        this._handleOnSubmit = this._handleOnSubmit.bind(this);
-    }
-
     state = {
         comment: '',
     };
 
-    _updateComment(event) {
+    _updateComment = (event) => {
         this.setState({
             comment: event.target.value,
         });
     }
 
-    _handleOnSubmit(event) {
+    _handleOnSubmit = (event) => {
         event.preventDefault();
         this._submitComment();
     }
 
-    _submitComment() {
+    _submitComment = () => {
         const { comment } = this.state;
 
         if (!comment) {
@@ -48,7 +40,7 @@ export default class Composer extends Component {
         });
     }
 
-    _handleOnKeyPress(event) {
+    _handleOnKeyPress = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             this._submitComment();
@@ -57,27 +49,24 @@ export default class Composer extends Component {
 
     render() {
         const { comment } = this.state;
+        const { avatar, userFirstName } = this.props;
 
         return (
-            <Consumer>
-                {(context) => (
-                    <section className = { Styles.composer }>
-                        <img src = { context.avatar } />
-                        <form onSubmit = { this._handleOnSubmit }>
-                            <textarea
-                                placeholder = { `What\'s on your mind, ${context.userFirstName}?` }
-                                value = { comment }
-                                onChange = { this._updateComment }
-                                onKeyPress = { this._handleOnKeyPress }
-                            />
-                            <input
-                                type = 'submit'
-                                value = 'Post'
-                            />
-                        </form>
-                    </section>
-                )}
-            </Consumer>
+            <section className={Styles.composer}>
+                <img src={avatar} />
+                <form onSubmit={this._handleOnSubmit}>
+                    <textarea
+                        placeholder={`What\'s on your mind, ${userFirstName}?`}
+                        value={comment}
+                        onChange={this._updateComment}
+                        onKeyPress={this._handleOnKeyPress}
+                    />
+                    <input
+                        type='submit'
+                        value='Post'
+                    />
+                </form>
+            </section>
         );
     }
 }

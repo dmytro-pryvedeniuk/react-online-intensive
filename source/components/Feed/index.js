@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 
+import {withProfile} from '../HOC/withProfile';
 import Composer from '../Composer';
 import Post from '../Post';
 import StatusBar from '../../components/StatusBar';
@@ -9,14 +10,8 @@ import Spinner from '../../components/Spinner';
 import Styles from './styles.m.css';
 import { getUniqueID, delay } from '../../instruments';
 
+@withProfile
 export default class Feed extends Component {
-    constructor() {
-        super();
-        this._createPost = this._createPost.bind(this);
-        this._setPostsFetchingState = this._setPostsFetchingState.bind(this);
-        this._likePost = this._likePost.bind(this);
-        this._deletePost = this._deletePost.bind(this);
-    }
 
     state = {
         isPostsFetching: false,
@@ -26,13 +21,13 @@ export default class Feed extends Component {
         ],
     };
 
-    _setPostsFetchingState(value) {
+    _setPostsFetchingState = (value) => {
         this.setState({
             isPostsFetching: value,
         });
     }
 
-    async _createPost(comment) {
+    _createPost = async (comment) => {
         this._setPostsFetchingState(true);
 
         const post = {
@@ -50,7 +45,7 @@ export default class Feed extends Component {
         this._setPostsFetchingState(false);
     }
 
-    async _likePost(id) {
+    _likePost = async (id) => {
         const { currentUserFirstName, currentUserLastName } = this.props;
         const { posts } = this.state;
         this._setPostsFetchingState(true);
@@ -80,7 +75,7 @@ export default class Feed extends Component {
         });
     }
 
-    async _deletePost(id) {
+    _deletePost = async (id) => {
         const { posts } = this.state;
 
         this._setPostsFetchingState(true);
