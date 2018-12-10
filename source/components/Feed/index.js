@@ -13,12 +13,13 @@ import Postman from '../../components/Postman';
 import { api, TOKEN, GROUP_ID } from '../../config/api';
 import { socket } from '../../socket/init';
 import Styles from './styles.m.css';
+import { delay } from '../../instruments';
 
 @withProfile
 export default class Feed extends Component {
     state = {
-        isPostsFetching:  false,
-        posts:            [],
+        isPostsFetching: false,
+        posts: [],
     };
 
     componentDidMount() {
@@ -35,7 +36,7 @@ export default class Feed extends Component {
                 !== `${meta.authorFirstName} ${meta.authorLastName}`
             ) {
                 this.setState(({ posts }) => ({
-                    posts: [ createdPost, ...posts ],
+                    posts: [createdPost, ...posts],
                 }));
             }
         });
@@ -98,17 +99,17 @@ export default class Feed extends Component {
         this._setPostsFetchingState(true);
 
         const response = await fetch(api, {
-            method:  'POST',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization:  TOKEN,
+                Authorization: TOKEN,
             },
             body: JSON.stringify({ comment }),
         });
         const { data: post } = await response.json();
 
         this.setState(({ posts }) => ({
-            posts:           [ post, ...posts ],
+            posts: [post, ...posts],
             isPostsFetching: false,
         }));
     };
@@ -117,7 +118,7 @@ export default class Feed extends Component {
         this._setPostsFetchingState(true);
 
         const response = await fetch(`${api}/${id}`, {
-            method:  'PUT',
+            method: 'PUT',
             headers: {
                 Authorization: TOKEN,
             },
@@ -125,7 +126,7 @@ export default class Feed extends Component {
         const { data: likedPost } = await response.json();
 
         this.setState(({ posts }) => ({
-            posts:           posts.map((post) => post.id === likedPost.id ? likedPost : post),
+            posts: posts.map((post) => post.id === likedPost.id ? likedPost : post),
             isPostsFetching: false,
         }));
     };
@@ -134,14 +135,14 @@ export default class Feed extends Component {
         this._setPostsFetchingState(true);
 
         await fetch(`${api}/${id}`, {
-            method:  'DELETE',
+            method: 'DELETE',
             headers: {
                 Authorization: TOKEN,
             },
         });
 
         this.setState(({ posts }) => ({
-            posts:           posts.filter((post) => post.id != id),
+            posts: posts.filter((post) => post.id != id),
             isPostsFetching: false,
         }));
     };
@@ -151,46 +152,52 @@ export default class Feed extends Component {
     }
 
     _animatePostmanEnter(postman) {
-        fromTo(postman, 1, { x: 280 }, { x: 0 });
-    }
+        var widthPlusRight = 280;
 
-    _animatePostmanEntered(postman) {
-        fromTo(postman, 1, { x: 0 }, { x: 280 });
-    };
+        fromTo(postman, 1,
+            { x: widthPlusRight },
+            {
+                x: 0,
+                onComplete: async () => {
+                    await delay(4000);
+                    fromTo(postman, 1, { x: 0 }, { x: widthPlusRight });
+                }
+            }
+        );
+    }
 
     render() {
         const { posts, isPostsFetching } = this.state;
 
         const postsJSX = posts.map((post) => {
             return (
-                <Catcher key = { post.id }>
+                <Catcher key={post.id}>
                     <Post
-                        { ...post }
-                        _deletePost = { this._deletePost }
-                        _likePost = { this._likePost }
+                        {...post}
+                        _deletePost={this._deletePost}
+                        _likePost={this._likePost}
                     />
                 </Catcher>
             );
         });
 
         return (
-            <section className = { Styles.feed }>
-                <Spinner isSpinning = { isPostsFetching } />
+            <section className={Styles.feed}>
+                <Spinner isSpinning={isPostsFetching} />
                 <StatusBar />
                 <Transition
                     appear
                     in
-                    onEnter = { this._animateComposerEnter }
-                    timeout = { 1000 }>
-                    <Composer _createPost = { this._createPost } />
+                    onEnter={this._animateComposerEnter}
+                    timeout={1000}>
+                    <Composer _createPost={this._createPost} />
                 </Transition>
                 {postsJSX}
                 <Transition
                     appear
                     in
-                    onEnter = { this._animatePostmanEnter }
-                    onEntered = { this._animatePostmanEntered }
-                    timeout = { 5000 }>
+                    onEnter={this._animatePostmanEnter}
+                    timeout={1000}>
                     <Postman />
                 </Transition>
             </section>
