@@ -9,6 +9,7 @@ import StatusBar from '../../components/StatusBar';
 import Spinner from '../../components/Spinner';
 import Catcher from '../../components/Catcher';
 import Postman from '../../components/Postman';
+import { delay } from '../../instruments';
 
 import { api, TOKEN, GROUP_ID } from '../../config/api';
 import { socket } from '../../socket/init';
@@ -17,8 +18,9 @@ import Styles from './styles.m.css';
 @withProfile
 export default class Feed extends Component {
     state = {
-        isPostsFetching: false,
-        posts:           [],
+        isShowingPostman: true,
+        isPostsFetching:  false,
+        posts:            [],
     };
 
     componentDidMount() {
@@ -150,6 +152,19 @@ export default class Feed extends Component {
         fromTo(composer, 1, { opacity: 0, rotationX: 50 }, { opacity: 1, rotationX: 0 });
     }
 
+    _animatePostmanEnter(postman) {
+        fromTo(postman, 1, { x: 280 }, { x: 0 });
+    }
+
+    _animatePostmanExit(postman) {
+        fromTo(postman, 1, { x: 0 }, { x: 280 });
+    }
+
+    _animatePostmanEntered = async () => {
+        await delay(4000);
+        this.setState({ isShowingPostman: false });
+    };
+
     render() {
         const { posts, isPostsFetching } = this.state;
 
@@ -177,7 +192,15 @@ export default class Feed extends Component {
                     <Composer _createPost = { this._createPost } />
                 </Transition>
                 {postsJSX}
-                <Postman />
+                <Transition
+                    appear
+                    in = { this.state.isShowingPostman }
+                    onEnter = { this._animatePostmanEnter }
+                    onEntered = { this._animatePostmanEntered }
+                    onExit = { this._animatePostmanExit }
+                    timeout = { 1000 }>
+                    <Postman />
+                </Transition>
             </section>
         );
     }
