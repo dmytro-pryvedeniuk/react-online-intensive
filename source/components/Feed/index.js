@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Transition } from 'react-transition-group';
+import { fromTo } from 'gsap';
 
 import { withProfile } from '../HOC/withProfile';
 import Composer from '../Composer';
@@ -6,6 +8,8 @@ import Post from '../Post';
 import StatusBar from '../../components/StatusBar';
 import Spinner from '../../components/Spinner';
 import Catcher from '../../components/Catcher';
+import Postman from '../../components/Postman';
+
 import { api, TOKEN, GROUP_ID } from '../../config/api';
 import { socket } from '../../socket/init';
 import Styles from './styles.m.css';
@@ -57,7 +61,7 @@ export default class Feed extends Component {
                 !== `${meta.authorFirstName} ${meta.authorLastName}`
             ) {
                 this.setState(({ posts }) => ({
-                    posts: posts.map((post) => post.id === updatedPost.id ? updatedPost: post)
+                    posts: posts.map((post) => post.id === updatedPost.id ? updatedPost : post),
                 }));
             }
         });
@@ -142,6 +146,10 @@ export default class Feed extends Component {
         }));
     };
 
+    _animateComposerEnter(composer) {
+        fromTo(composer, 1, { opacity: 0, rotationX: 50 }, { opacity: 1, rotationX: 0 });
+    }
+
     render() {
         const { posts, isPostsFetching } = this.state;
 
@@ -161,8 +169,15 @@ export default class Feed extends Component {
             <section className = { Styles.feed }>
                 <Spinner isSpinning = { isPostsFetching } />
                 <StatusBar />
-                <Composer _createPost = { this._createPost } />
+                <Transition
+                    appear
+                    in
+                    onEnter = { this._animateComposerEnter }
+                    timeout = { 1000 }>
+                    <Composer _createPost = { this._createPost } />
+                </Transition>
                 {postsJSX}
+                <Postman />
             </section>
         );
     }
