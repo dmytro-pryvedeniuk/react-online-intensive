@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Instruments: sum should sum two numbers 1`] = `17`;
