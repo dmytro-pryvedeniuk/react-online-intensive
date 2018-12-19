@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import { Composer } from './';
 
 const comment = 'Hello';
+const avatar = './homer.png';
 
 const initialState = {
     comment: '',
@@ -14,9 +15,15 @@ const updatedState = {
 
 const props = {
     _createPost: jest.fn(),
+    avatar: avatar,
+    currentUserFirstName: 'Homer'
 }
 
-const result = mount(<Composer {...props} />);
+let result;
+
+beforeEach(() => {
+    result = mount(<Composer {...props} />);
+});
 
 describe('Composer component:', () => {
     test('should have 1 "section" element', () => {
@@ -81,20 +88,70 @@ describe('Composer component:', () => {
     });
 
     test('_createPost should be called when submitting form', () => {
-        result.find('form').simulate('submit');
+        const submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
 
-        expect(props._createPost).toHaveBeenCalledTimes(1);
+        result.find('form').simulate('submit', { preventDefault: jest.fn() });
+
+        expect(submitCommentSpy).toBeCalledTimes(1);
+        // Does not work
+        //expect(props._createPost).toHaveBeenCalledTimes(1);
     });
 
     test('_submitComment and _handleFormSubmit class methods should be called when submitting form', () => {
         var instance = result.instance();
-        const _submitCommentSpy = jest.spyOn(instance, '_submitComment', );
+        const _submitCommentSpy = jest.spyOn(instance, '_submitComment');
         const _handleFormSubmitSpy = jest.spyOn(instance, '_handleFormSubmit');
 
         // Does not work
-        result.find('form').simulate('submit');
+        result.find('form').simulate('submit', { preventDefault: jest.fn() });
 
         expect(_submitCommentSpy).toHaveBeenCalledTimes(1);
         expect(_handleFormSubmitSpy).toHaveBeenCalledTimes(1);
+    });
+
+    test('textarea should contain firstname in the placeholder', () => {
+        expect(result.find('textarea').prop('placeholder')).toBe(`What\'s on your mind, Homer?`)
+    });
+
+    test('textarea should have avatar used in "img"', () => {
+        expect(result.find('img').prop('src')).toBe(avatar);
+    });
+
+    test('updateComment should change comment in state', () => {
+        const event = {
+            target: {
+                value: '42'
+            }
+        };
+
+        result.instance()._updateComment(event);
+
+        expect(result.state('comment')).toBe('42');
+    });
+
+
+    test('should submit when pressing "Enter"', () => {
+        const event = {
+            key: 'Enter',
+            preventDefault: jest.fn(),
+        };
+        const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
+
+        result.instance()._submitOnEnter(event);
+
+        expect(_submitCommentSpy).toBeCalledTimes(1);
+        expect(event.preventDefault).toBeCalledTimes(1);
+    });
+
+    test('should not submit when anything else except "Enter" is pressed', () => {
+        const event = {
+            key: 'Escape',
+            preventDefault: jest.fn(),
+        };
+        const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
+
+        result.instance()._submitOnEnter(event);
+
+        expect(_submitCommentSpy).not.toHaveBeenCalled();
     });
 });

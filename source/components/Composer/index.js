@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import {func, string} from 'prop-types';
 
 import { withProfile } from '../HOC/withProfile';
 
@@ -7,7 +7,9 @@ import Styles from './styles.m.css';
 
 export class Composer extends Component {
     static propTypes = {
-        _createPost: PropTypes.func.isRequired,
+        _createPost: func.isRequired,
+        avatar: string.isRequired,
+        currentUserFirstName: string.isRequired
     };
 
     state = {
@@ -27,19 +29,19 @@ export class Composer extends Component {
 
     _submitComment = () => {
         const { comment } = this.state;
-
+        const {_createPost} = this.props;
         if (!comment) {
             return null;
         }
 
-        this.props._createPost(comment);
+        _createPost(comment);
 
         this.setState({
             comment: '',
         });
     };
 
-    _handleOnKeyPress = (event) => {
+    _submitOnEnter = (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
             this._submitComment();
@@ -58,7 +60,7 @@ export class Composer extends Component {
                         placeholder = { `What\'s on your mind, ${currentUserFirstName}?` }
                         value = { comment }
                         onChange = { this._updateComment }
-                        onKeyPress = { this._handleOnKeyPress }
+                        onKeyPress = { this._submitOnEnter }
                     />
                     <input
                         type = 'submit'
