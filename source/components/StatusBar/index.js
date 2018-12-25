@@ -6,11 +6,19 @@ import Styles from './styles.m.css';
 import { Transition } from 'react-transition-group';
 import { fromTo } from 'gsap';
 import { Link } from 'react-router-dom';
+import { func, bool, string } from 'prop-types';
 
 @withProfile
 export default class StatusBar extends Component {
     state = {
         online: false,
+    };
+
+    static propTypes = {
+        _logOut:              func.isRequired,
+        authenticated:        bool.isRequired,
+        avatar:               string.isRequired,
+        currentUserFirstName: string.isRequired,
     };
 
     componentDidMount = () => {
@@ -37,7 +45,7 @@ export default class StatusBar extends Component {
     }
 
     render() {
-        const { avatar, currentUserFirstName } = this.props;
+        const { avatar, currentUserFirstName, authenticated, _logOut } = this.props;
         const { online } = this.state;
 
         const statusStyle = cx(Styles.status, {
@@ -58,11 +66,14 @@ export default class StatusBar extends Component {
                         <div>{statusMessage}</div>
                         <span />
                     </div>
-                    <Link to = '/profile'>
-                        <img src = { avatar } />
-                        <span>{currentUserFirstName}</span>
-                    </Link>
-                    <Link to = '/feed'>Feed</Link>
+                    {authenticated ? (
+                        <Link to = '/profile'>
+                            <img src = { avatar } />
+                            <span>{currentUserFirstName}</span>
+                        </Link>
+                    ) : null}
+                    {authenticated ? <Link to = '/feed'>Feed</Link> : null}
+                    {authenticated ? <a onClick = { _logOut }>Log out</a> : null}
                 </section>
             </Transition>
         );
