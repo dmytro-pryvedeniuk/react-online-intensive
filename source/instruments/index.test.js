@@ -30,6 +30,10 @@ describe('Instruments:', () => {
         expect(() => getUniqueID("X")).toThrow();
     });
 
+    test('getUniqueID should return 15-characters-length string by default', () => {
+        expect(getUniqueID()).toHaveLength(15);
+    });
+
     test('getUniqueID should return string with desired length', () => {
         expect(typeof getUniqueID()).toBe('string');
         expect(getUniqueID(5)).toHaveLength(5);

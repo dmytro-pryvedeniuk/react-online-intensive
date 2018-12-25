@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Composer component: should correspond to snapshot 1`] = `"<section class=\\"composer\\"><img src=\\"./homer.png\\"><form><textarea placeholder=\\"What's on your mind, Homer?\\"></textarea><input type=\\"submit\\" value=\\"Post\\"></form></section>"`;

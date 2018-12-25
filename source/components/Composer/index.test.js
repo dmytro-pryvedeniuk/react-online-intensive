@@ -19,11 +19,9 @@ const props = {
     currentUserFirstName: 'Homer'
 }
 
-let result;
-
-beforeEach(() => {
-    result = mount(<Composer {...props} />);
-});
+const result = mount(<Composer {...props} />);
+const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
+const _handleFormSubmitSpy = jest.spyOn(result.instance(), '_handleFormSubmit');
 
 describe('Composer component:', () => {
     test('should have 1 "section" element', () => {
@@ -88,21 +86,15 @@ describe('Composer component:', () => {
     });
 
     test('_createPost should be called when submitting form', () => {
-        const submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
-
         result.find('form').simulate('submit', { preventDefault: jest.fn() });
-
-        expect(submitCommentSpy).toBeCalledTimes(1);
-        // Does not work
-        //expect(props._createPost).toHaveBeenCalledTimes(1);
+        
+        expect(props._createPost).toHaveBeenCalledTimes(1);
     });
 
     test('_submitComment and _handleFormSubmit class methods should be called when submitting form', () => {
-        var instance = result.instance();
-        const _submitCommentSpy = jest.spyOn(instance, '_submitComment');
-        const _handleFormSubmitSpy = jest.spyOn(instance, '_handleFormSubmit');
+        _submitCommentSpy.mockClear();
+        _handleFormSubmitSpy.mockClear();
 
-        // Does not work
         result.find('form').simulate('submit', { preventDefault: jest.fn() });
 
         expect(_submitCommentSpy).toHaveBeenCalledTimes(1);
@@ -129,14 +121,13 @@ describe('Composer component:', () => {
         expect(result.state('comment')).toBe('42');
     });
 
-
     test('should submit when pressing "Enter"', () => {
+        _submitCommentSpy.mockClear();
+
         const event = {
             key: 'Enter',
             preventDefault: jest.fn(),
         };
-        const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
-
         result.instance()._submitOnEnter(event);
 
         expect(_submitCommentSpy).toBeCalledTimes(1);
@@ -144,14 +135,19 @@ describe('Composer component:', () => {
     });
 
     test('should not submit when anything else except "Enter" is pressed', () => {
+        _submitCommentSpy.mockClear();
+
         const event = {
             key: 'Escape',
             preventDefault: jest.fn(),
         };
-        const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
 
         result.instance()._submitOnEnter(event);
 
         expect(_submitCommentSpy).not.toHaveBeenCalled();
+    });
+
+    test('should correspond to snapshot', () => {
+        expect(result.html()).toMatchSnapshot();
     });
 });
