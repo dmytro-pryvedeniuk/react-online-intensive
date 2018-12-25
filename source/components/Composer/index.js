@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {func, string} from 'prop-types';
+import { func, string } from 'prop-types';
 
 import { withProfile } from '../HOC/withProfile';
 
@@ -7,9 +7,9 @@ import Styles from './styles.m.css';
 
 export class Composer extends Component {
     static propTypes = {
-        _createPost: func.isRequired,
-        avatar: string.isRequired,
-        currentUserFirstName: string.isRequired
+        _createPost:          func.isRequired,
+        avatar:               string.isRequired,
+        currentUserFirstName: string.isRequired,
     };
 
     state = {
@@ -29,7 +29,7 @@ export class Composer extends Component {
 
     _submitComment = () => {
         const { comment } = this.state;
-        const {_createPost} = this.props;
+        const { _createPost } = this.props;
         if (!comment) {
             return null;
         }

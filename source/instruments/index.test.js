@@ -1,10 +1,10 @@
-import {sum, delay, getUniqueID, getFullApiUrl} from './';
+import { sum, delay, getUniqueID, getFullApiUrl } from './';
 
-describe('Instruments:', () => {
+describe('instruments:', () => {
     test('sum should be a function', () => {
         expect(sum).toBeInstanceOf(Function);
     });
-    
+
     test('sum should throw when called with non-number as second argument', () => {
         expect(() => sum(1, 'X')).toThrow();
     });
@@ -27,7 +27,7 @@ describe('Instruments:', () => {
     });
 
     test('getUniqueID should throw when called with non-number', () => {
-        expect(() => getUniqueID("X")).toThrow();
+        expect(() => getUniqueID('X')).toThrow();
     });
 
     test('getUniqueID should return 15-characters-length string by default', () => {
@@ -51,10 +51,9 @@ describe('Instruments:', () => {
     test('getFullApiUrl should throw when second argument is not a string', () => {
         expect(() => getFullApiUrl('abc', 4)).toThrow();
     });
-    
+
     test('getFullApiUrl should return proper url', () => {
         expect(getFullApiUrl('123', 'abc')).toBe('123/abc');
         expect(getFullApiUrl('api', 'groupId')).toBe('api/groupId');
     });
-})
-
+});

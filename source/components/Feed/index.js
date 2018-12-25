@@ -5,12 +5,10 @@ import { fromTo } from 'gsap';
 import { withProfile } from '../HOC/withProfile';
 import Composer from '../Composer';
 import Post from '../Post';
-import StatusBar from '../../components/StatusBar';
 import Spinner from '../../components/Spinner';
 import Catcher from '../../components/Catcher';
 import Postman from '../../components/Postman';
 import Counter from '../../components/Counter';
-
 
 import { api, TOKEN, GROUP_ID } from '../../config/api';
 import { socket } from '../../socket/init';
@@ -21,7 +19,7 @@ import { delay } from '../../instruments';
 export default class Feed extends Component {
     state = {
         isPostsFetching: false,
-        posts: [],
+        posts:           [],
     };
 
     componentDidMount() {
@@ -38,7 +36,7 @@ export default class Feed extends Component {
                 !== `${meta.authorFirstName} ${meta.authorLastName}`
             ) {
                 this.setState(({ posts }) => ({
-                    posts: [createdPost, ...posts],
+                    posts: [ createdPost, ...posts ],
                 }));
             }
         });
@@ -101,17 +99,17 @@ export default class Feed extends Component {
         this._setPostsFetchingState(true);
 
         const response = await fetch(api, {
-            method: 'POST',
+            method:  'POST',
             headers: {
                 'Content-Type': 'application/json',
-                Authorization: TOKEN,
+                Authorization:  TOKEN,
             },
             body: JSON.stringify({ comment }),
         });
         const { data: post } = await response.json();
 
         this.setState(({ posts }) => ({
-            posts: [post, ...posts],
+            posts:           [ post, ...posts ],
             isPostsFetching: false,
         }));
     };
@@ -120,7 +118,7 @@ export default class Feed extends Component {
         this._setPostsFetchingState(true);
 
         const response = await fetch(`${api}/${id}`, {
-            method: 'PUT',
+            method:  'PUT',
             headers: {
                 Authorization: TOKEN,
             },
@@ -128,7 +126,7 @@ export default class Feed extends Component {
         const { data: likedPost } = await response.json();
 
         this.setState(({ posts }) => ({
-            posts: posts.map((post) => post.id === likedPost.id ? likedPost : post),
+            posts:           posts.map((post) => post.id === likedPost.id ? likedPost : post),
             isPostsFetching: false,
         }));
     };
@@ -137,14 +135,14 @@ export default class Feed extends Component {
         this._setPostsFetchingState(true);
 
         await fetch(`${api}/${id}`, {
-            method: 'DELETE',
+            method:  'DELETE',
             headers: {
                 Authorization: TOKEN,
             },
         });
 
         this.setState(({ posts }) => ({
-            posts: posts.filter((post) => post.id != id),
+            posts:           posts.filter((post) => post.id != id),
             isPostsFetching: false,
         }));
     };
@@ -161,7 +159,7 @@ export default class Feed extends Component {
             1,
             { x: widthPlusRight },
             {
-                x: 0,
+                x:          0,
                 onComplete: async () => {
                     await delay(4000);
                     fromTo(postman, 1, { x: 0 }, { x: widthPlusRight });
@@ -176,22 +174,22 @@ export default class Feed extends Component {
         const postsJSX = posts.map((post) => {
             return (
                 <CSSTransition
-                    classNames={{
-                        enter: Styles.postInStart,
+                    classNames = {{
+                        enter:       Styles.postInStart,
                         enterActive: Styles.postInEnd,
-                        exit: Styles.postOutStart,
-                        exitActive: Styles.postOutEnd,
+                        exit:        Styles.postOutStart,
+                        exitActive:  Styles.postOutEnd,
                     }}
-                    key={post.id}
-                    timeout={{
+                    key = { post.id }
+                    timeout = {{
                         enter: 500,
-                        exit: 400,
+                        exit:  400,
                     }}>
                     <Catcher>
                         <Post
-                            {...post}
-                            _deletePost={this._deletePost}
-                            _likePost={this._likePost}
+                            { ...post }
+                            _deletePost = { this._deletePost }
+                            _likePost = { this._likePost }
                         />
                     </Catcher>
                 </CSSTransition>
@@ -199,23 +197,22 @@ export default class Feed extends Component {
         });
 
         return (
-            <section className={Styles.feed}>
-                <Spinner isSpinning={isPostsFetching} />
-                <StatusBar />
+            <section className = { Styles.feed }>
+                <Spinner isSpinning = { isPostsFetching } />
                 <Transition
                     appear
                     in
-                    onEnter={this._animateComposerEnter}
-                    timeout={1000}>
-                    <Composer _createPost={this._createPost} />
+                    onEnter = { this._animateComposerEnter }
+                    timeout = { 1000 }>
+                    <Composer _createPost = { this._createPost } />
                 </Transition>
-                <Counter count={postsJSX.length} />
+                <Counter count = { postsJSX.length } />
                 <TransitionGroup>{postsJSX}</TransitionGroup>
                 <Transition
                     appear
                     in
-                    onEnter={this._animatePostmanEnter}
-                    timeout={1000}>
+                    onEnter = { this._animatePostmanEnter }
+                    timeout = { 1000 }>
                     <Postman />
                 </Transition>
             </section>

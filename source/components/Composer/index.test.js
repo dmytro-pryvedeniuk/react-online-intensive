@@ -7,23 +7,23 @@ const avatar = './homer.png';
 
 const initialState = {
     comment: '',
-}
+};
 
 const updatedState = {
     comment: comment,
-}
+};
 
 const props = {
-    _createPost: jest.fn(),
-    avatar: avatar,
-    currentUserFirstName: 'Homer'
-}
+    _createPost:          jest.fn(),
+    avatar:               avatar,
+    currentUserFirstName: 'Homer',
+};
 
-const result = mount(<Composer {...props} />);
+const result = mount(<Composer { ...props } />);
 const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
 const _handleFormSubmitSpy = jest.spyOn(result.instance(), '_handleFormSubmit');
 
-describe('Composer component:', () => {
+describe('composer component:', () => {
     test('should have 1 "section" element', () => {
         expect(result.find('section')).toHaveLength(1);
     });
@@ -71,8 +71,8 @@ describe('Composer component:', () => {
     test('should handle textarea "change" event', () => {
         result.find('textarea').simulate('change', {
             target: {
-                value: comment
-            }
+                value: comment,
+            },
         });
 
         expect(result.find('textarea').text()).toBe(comment);
@@ -87,7 +87,7 @@ describe('Composer component:', () => {
 
     test('_createPost should be called when submitting form', () => {
         result.find('form').simulate('submit', { preventDefault: jest.fn() });
-        
+
         expect(props._createPost).toHaveBeenCalledTimes(1);
     });
 
@@ -102,7 +102,7 @@ describe('Composer component:', () => {
     });
 
     test('textarea should contain firstname in the placeholder', () => {
-        expect(result.find('textarea').prop('placeholder')).toBe(`What\'s on your mind, Homer?`)
+        expect(result.find('textarea').prop('placeholder')).toBe('What\'s on your mind, Homer?');
     });
 
     test('textarea should have avatar used in "img"', () => {
@@ -112,8 +112,8 @@ describe('Composer component:', () => {
     test('updateComment should change comment in state', () => {
         const event = {
             target: {
-                value: '42'
-            }
+                value: '42',
+            },
         };
 
         result.instance()._updateComment(event);
@@ -125,7 +125,7 @@ describe('Composer component:', () => {
         _submitCommentSpy.mockClear();
 
         const event = {
-            key: 'Enter',
+            key:            'Enter',
             preventDefault: jest.fn(),
         };
         result.instance()._submitOnEnter(event);
@@ -138,7 +138,7 @@ describe('Composer component:', () => {
         _submitCommentSpy.mockClear();
 
         const event = {
-            key: 'Escape',
+            key:            'Escape',
             preventDefault: jest.fn(),
         };
 
